@@ -6,15 +6,15 @@
   "author": "40小白独立开发之路",
   "dependencies": {
     "express": "4.17.1"
-  
   },
-  "scripts": {"start:dev": "tsc-watch --onsuccess \"node dist/main.js\"",
-                 "format": "prettier --write \"src/**/*.ts\""
+  "scripts": {
+    "start:dev": "tsc-watch --onsuccess \"node dist/main.js\"",
+    "format": "prettier --write \"src/**/*.ts\""
   },
-  
   "devDependencies": {
     "@types/express": "^4.17.1",
     "@types/node": "^17.0.21",
+    "dotenv": "^8.2.0",
     "tsc-watch": "^4.2.3",
     "typescript": "3.8.3"
   }
