@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction, response} from "express";
-import { request } from "http";
-export const requesturl =(
+import { Request, Response, NextFunction, } from "express";
+
+export const requestUrl =(
     request: Request,
     response: Response,
     next: NextFunction
@@ -9,3 +9,20 @@ export const requesturl =(
     console.log(request.url)
     next();
 };
+export const defaultErrorHandler=(
+    error: any,
+    request: Request,
+    response: Response,
+    next: NextFunction,
+
+)=>{
+let statusCode: number,message: string;
+switch(error.message){
+    default:
+        statusCode=500;
+        message='处理器错误!';
+        break;
+};
+response.status(statusCode).send({message});
+
+}

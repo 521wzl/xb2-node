@@ -1,6 +1,6 @@
 import express from 'express';
-import * as postcontroller from './post.controller';
-import {requesturl} from '../app/app.middleware'
+import * as postController from './post.controller';
+import {requestUrl} from '../app/app.middleware'
 const router=express.Router();
-router.get('/posts',requesturl,postcontroller.index);
+router.get('/posts',requestUrl,postController.index);
 export default router;

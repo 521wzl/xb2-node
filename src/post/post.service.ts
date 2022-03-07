@@ -1,4 +1,4 @@
-export const getposts =()=>{
+export const getPosts =()=>{
 const data=[
 {   
 content: '明月出天山,苍茫云海间',
