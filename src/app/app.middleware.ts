@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction, } from "express";
-
+import { validateUserData } from "../user/user.middleware";
 export const requestUrl =(
     request: Request,
     response: Response,
@@ -27,6 +27,20 @@ export const defaultErrorHandler=(
     };
 let statusCode: number,message: string;
 switch(error.message){
+    case "NAME_IS_REQUIRED":
+        statusCode=400;
+        message = '用户名为空';
+        break;
+
+    case "PASSWORD_IS_REQUIRED":
+        statusCode=400;
+        message = '用户密码为空';
+        break;
+    case "NAME_ALREADY_EXIST":
+        statusCode=409;
+        message = '用户名已经被占用';
+        break;
+
     default:
         statusCode=500;
         message='处理器错误!';

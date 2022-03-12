@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction, response } from 'express';
-import { request } from 'http';
+
 import _ from 'lodash';
 import {creatPost, deletePost, getPosts, updatePost} from './post.service';
 export const index=async(

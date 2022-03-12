@@ -5,6 +5,7 @@
   "main": "index.js",
   "author": "40小白独立开发之路",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "express": "4.17.1",
     "lodash": "^4.17.15",
     "mysql2": "^2.1.0"
@@ -14,6 +15,7 @@
     "format": "prettier --write \"src/**/*.ts\""
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
     "@types/express": "^4.17.1",
     "@types/lodash": "^4.14.179",
     "@types/mysql2": "github:types/mysql2",
