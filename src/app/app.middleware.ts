@@ -5,10 +5,16 @@ export const requestUrl =(
     response: Response,
     next: NextFunction
 )=>{
+    /**
+     * 中间件：控制台输出请求地址
+     */
 
     console.log(request.url)
     next();
 };
+/**
+ *中间件：异常信息处理
+ */
 export const defaultErrorHandler=(
     error: any,
     request: Request,
@@ -16,6 +22,9 @@ export const defaultErrorHandler=(
     next: NextFunction,
 
 )=>{
+    if(error.message){
+        console.log('error:',error.message)
+    };
 let statusCode: number,message: string;
 switch(error.message){
     default:
