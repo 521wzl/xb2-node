@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction, } from "express";
 import { validateUserData } from "../user/user.middleware";
+import { validateLoginData } from "../auth/auth.middleware";
 export const requestUrl =(
     request: Request,
     response: Response,
@@ -36,11 +37,18 @@ switch(error.message){
         statusCode=400;
         message = '用户密码为空';
         break;
+    case "USER_DOSE_NOT_EXIST":
+            statusCode=400;
+            message = '用户不存在';
+            break;
     case "NAME_ALREADY_EXIST":
-        statusCode=409;
+        statusCode=400;
         message = '用户名已经被占用';
         break;
-
+    case "PASSWORD_IS_WRONG":
+        statusCode=400;
+        message = '密码不对';
+        break;
     default:
         statusCode=500;
         message='处理器错误!';
