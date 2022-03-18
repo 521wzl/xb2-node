@@ -25,10 +25,11 @@ export const store=async (
     /**
      * 准备数据
      */
-    const{title}=request.body;
+    const{title,content}=request.body;
+    const {id:userId} = request.user;
     try{
-        const data= await creatPost({title})
-        response.status(201).send(data)
+        const data= await creatPost({title,content,userId});
+        response.status(201).send(data);
     }catch(error){
         next(error)};
 };
@@ -44,10 +45,12 @@ export const update= async (
      * 准备数据
      */
     const{postId} = request.params;
-    const post =_.pick(request.body,['title','content']);
+    //console.log(request.params);
+    //const{title,content} = request.body;
+    const post =_.pick(request.body,['title','content']);//可以更改content里的一条内容，
     try{
        
-        const data=await updatePost(parseInt(postId,10),post)
+        const data=await updatePost(parseInt(postId,10),post);
         response.status(201).send(data);
     }catch(error){
         next(error);

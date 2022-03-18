@@ -32,7 +32,7 @@ export const creatPost=async(post:PostModel)=>{
     return data;
 };
 /**
- * 更新数据数据
+ * 定义更新内容用的服务
  */
 export const updatePost= async(postId:number,post:PostModel)=>{
     const statement=`
@@ -41,7 +41,7 @@ export const updatePost= async(postId:number,post:PostModel)=>{
     WHERE id=?
     `;
     const[data]= await connection .promise().query(statement,[post,postId]);// 此处是数组类型
-    return(data);
+    return data;
     
 }
 /**

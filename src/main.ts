@@ -12,7 +12,7 @@ app.listen(AIR_PORT, () => {
      console.log('数据连接服务失败:',error.message);
      return;
    }
-   console.log('成功连接服务！')
+   console.log('成功连接服务!')
 
  });
  

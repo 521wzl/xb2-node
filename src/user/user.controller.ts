@@ -15,7 +15,7 @@ export const store = async (
  */
 const {name,password} = request.body;
 try{
-    //const post =bcrypt.hash(password,10);
+    
     const data = await userService.creatUser({name,password});
     response.status(203).send(data)
 }catch(error){

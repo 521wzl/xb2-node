@@ -2,7 +2,7 @@ import {connection} from '../app/database/mysql'
 import { hashPassword } from './user.middleware';
 import {UserModel} from './user.model'
 /**
- * 创建用户
+ * 定义用户注册
  */
 export const creatUser = async(user:UserModel)=>{
     const statement =`
@@ -10,29 +10,29 @@ export const creatUser = async(user:UserModel)=>{
     set?
     
     `;
-    const [data] = await connection.promise().query(statement,user);
+    const [data] = await connection.promise().query(statement,user);//此处的user 在处理器里被{name,password}赋实参了
     return data;
 };
 /**
- * 用户名重复检查
+ * 定义用户登陆验证
  */
 interface getUserOptions{
     hasPassword?: boolean;
 }
 export const getUserByName = async (
-    name:string, 
-    options: getUserOptions={}
+    name: string, 
+    options: getUserOptions = {}
     ) =>{
-    const {hasPassword} = options
-    const statement =`
+    const {hasPassword} = options;
+    const statement = `
     SELECT 
-    id ,
+    id,
     name 
-    ${hashPassword? ',password' : ''}
+    ${hashPassword? ',password' : ''} 
     FROM user
     WHERE name = ?
 
-    `;
-    const [ data ] = await connection.promise().query( statement, name);
-    return data [ 0 ] ;
+    `;//上面name后面不能有逗号，因为他后面要添加,password
+    const [data] = await connection.promise().query( statement, name);
+    return data[0] ;
 };

@@ -7,7 +7,7 @@ export const validateUserData = async (
     next: NextFunction
 )=>{
     console.log('验证用户数据');
-    const {name, password} = request.body;
+    const {name, password} = request.body;//客户端输入的数据
     if (!name)
     return next(new Error ('NAME_IS_REQUIRED'));
     
@@ -17,7 +17,7 @@ export const validateUserData = async (
     /**
      * 用户名重复判断
      */
-    const user = await userService.getUserByName (name);// user不能写成name，就少写了个await，程序就卡在那儿，不往下走了
+    const user = await userService.getUserByName (name);// user不能写成name，就少写了个await，程序就卡在那儿，不往下走了，此处的user是一个数组，里面包含id,name
     if (user)   
     return next (new Error ('NAME_ALREADY_EXIST'))
     next();
