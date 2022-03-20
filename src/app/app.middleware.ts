@@ -51,9 +51,10 @@ switch(error.message){
         message = '用户名已经被占用';
         break;
     
-    case "UNAUTHORIZED":
-        statusCode = 401;
-        message = '请先登陆';
+    
+    case "OWN_RESOURCE_DOSE_NOT_EXIST":
+        statusCode = 403;
+        message = '对不起!您没有权限';
         break;
     default:
         statusCode = 500;

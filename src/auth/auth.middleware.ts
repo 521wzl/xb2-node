@@ -4,6 +4,8 @@ import * as userService from '../user/user.service';
 import jwt from 'jsonwebtoken';
 import { PUBLIC_KEY } from "../app/app.config";
 import { TokenPayload } from "./auth.interface";
+import { access } from "fs";
+import { possess } from "./auth.service";
 export const validateLoginData = async (
     request: Request,
     response: Response,
@@ -55,7 +57,7 @@ export const authGuard =(
     const authorization = request.header('Authorization');
     if(!authorization) throw new Error();
     const token = authorization.replace('Bearer ','');
-    console.log(token);
+    //console.log(token);
     if(!token) throw new Error();
     try{
         /**
@@ -70,4 +72,40 @@ export const authGuard =(
          */
         next(new Error('UNAUTHORIZED'));
     }
+};
+/**
+ * 定义一个用户资源访问控制处理器
+ */
+interface accessControlOptions{
+    possession: boolean;
+};
+export const accessControl = (options:accessControlOptions)=>{
+    const {possession} =options;
+    
+    return async (request:Request, response:Response, next: NextFunction)=>{
+        console.log("访问控制")
+        const {id:userId}= request.user;
+        if (userId==1) next();
+        //const {postId}=request.params;
+        const resourceIdParams = Object.keys(request.params)[0];
+        const resourceType = resourceIdParams.replace("Id" , " ");
+        const resourceId =parseInt(request.params[resourceIdParams], 10);
+        //const userId = request.user;
+        //if (userId==1) next();
+        
+            if (possession){
+            try{
+            const OwnResource = await possess({resourceId,resourceType, userId});
+            if(!OwnResource){
+            return next (new Error("OWN_RESOURCE_DOSE_NOT_EXIST"));};
+            
+        }catch(error){
+            next (error);
+        };
+    };
+    next();
+
+    };
+        
+
 };
