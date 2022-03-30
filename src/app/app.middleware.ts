@@ -50,8 +50,6 @@ switch(error.message){
         statusCode = 400;
         message = '用户名已经被占用';
         break;
-    
-    
     case "OWN_RESOURCE_DOSE_NOT_EXIST":
         statusCode = 403;
         message = '对不起!您没有权限';
