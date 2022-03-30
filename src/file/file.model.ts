@@ -5,6 +5,9 @@ export class FileModel{
     filename: string;
     size: number;
     postId?: number;
-    userId: number
+    userId: number;
+    width?:number;
+    height?:number;
+    metedata?:JSON
 
 }
