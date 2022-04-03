@@ -68,7 +68,7 @@ export const serve = async (
                 filename = `${filename}-${size}`;
                 root = path.join(root, resized)
             };
-            console.log('why');
+          
 
         response.sendFile(filename, {
             root,
@@ -78,7 +78,7 @@ export const serve = async (
             },
            
         });
-        console.log('奇怪');
+       
     }}catch(error){
         next(error);
     };

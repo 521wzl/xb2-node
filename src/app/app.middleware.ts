@@ -55,9 +55,15 @@ switch(error.message){
         message = '对不起!您没有权限';
         break;
     case "FILE_NOT_EXIST":
-            statusCode = 404;
-            message = '文件不存在';
-            break;
+        statusCode = 404;
+        message = '文件不存在';
+        break;
+     
+    case "FILE_NOT_FOUND":
+        statusCode = 404;
+        message = '文件找不到';
+        break;
+        
     default:
         statusCode = 500;
         message='处理器错误!';
