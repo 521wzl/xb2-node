@@ -97,7 +97,7 @@ export const accessControl = (options:accessControlOptions)=>{
             try{
             const OwnResource = await possess({resourceId,resourceType, userId});
             if(!OwnResource){
-            return next (new Error("OWN_RESOURCE_DOSE_NOT_EXIST"));};
+            return next (new Error("USER_DOSE_NOT_OWN_RESOURCE"));};
             
         }catch(error){
             next (error);

@@ -55,3 +55,45 @@ WHERE id = ?
 const [data] = await connection.promise().query(statement,postId)
 };
 
+/**
+ * 为post_tag 添加字段
+ */
+ export const creat_post_tag = async(
+    postId:number,
+    tagId: number
+
+)=>{
+    const statement = `
+    INSERT INTO post_tag
+    VALUES(?, ?)
+    `;
+    const [data] = await connection.promise().query(statement,[postId,tagId]);
+    return data[0];
+};
+/**
+ * 验证post_tag
+ */
+export const post_has_tag = async(
+    postId:number, 
+    tagId:number
+)=>{
+    const statement = `
+    SELECT * FROM post_tag
+    WHERE postId= ? AND tagId = ?
+    `;
+    const [data] = await connection.promise().query(statement,[postId,tagId])
+    return data[0] ? true : false;
+    };
+/**
+ * 定义一个删除内容标签的服务
+ */
+export const Delete_post_tag= async (postId: number, tagId: number
+
+)=>{
+    const statement = `
+    DELETE FROM post_tag
+    WHERE postId =? AND tagId =?
+    `;
+    const [data] = await connection.promise().query(statement,[postId,tagId]);
+    return data;
+};

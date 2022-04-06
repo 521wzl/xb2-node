@@ -22,7 +22,7 @@ export const signToken = (options: SignTokenOptions)=>{
 
 }
 /**
- * 定义检查用户是否拥有制定资源的功能
+ * 定义检查用户是否拥有指定资源的功能
  */
 interface possessControlOptions{
     resourceId: number,
