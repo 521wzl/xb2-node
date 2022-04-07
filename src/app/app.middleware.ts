@@ -50,17 +50,28 @@ switch(error.message){
         statusCode = 400;
         message = '用户名已经被占用';
         break;
-    case "OWN_RESOURCE_DOSE_NOT_EXIST":
+    case "USER_DOSE_NOT_OWN_RESOURCE":
         statusCode = 403;
-        message = '对不起!您没有权限';
+        message = '对不起!您没有处理该内容的权限';
         break;
     case "FILE_NOT_EXIST":
         statusCode = 404;
         message = '文件不存在';
         break;
+<<<<<<< HEAD
     case "UNABLE_REPLY_THIS_COMMENT":
         statusCode = 404;
         message = '您不能回复这条评论';
+=======
+    case "TAG_EXIST_ALREADY":
+        statusCode = 404;
+        message = '标签已存在';
+        break;
+   
+    case "POST_TAG_EXIST_ALREADY":
+        statusCode = 404;
+        message = '内容标签已存在';
+>>>>>>> tags
         break;
     default:
         statusCode = 500;

@@ -1,7 +1,23 @@
 import { Request, Response, NextFunction, response } from 'express';
 
 import _ from 'lodash';
-import {creatPost, deletePost, getPosts, updatePost} from './post.service';
+import {creatPost, 
+    deletePost,
+     getPosts,
+      updatePost,
+      creat_post_tag, 
+      post_has_tag,  
+      Delete_post_tag
+    } from './post.service';
+import {
+    creat_tag, 
+    get_tag_by_name,
+   
+} from '../tag/tag.service'
+
+
+import { Tag_Model } from '../tag/tag.model'
+
 export const index=async(
     request: Request,
     response: Response,
@@ -71,4 +87,66 @@ try{
 }catch(error){
     next(error);
 };
+};
+
+/**
+ * 为内容添加标签
+ */
+ export const store_post_tag = async(
+     request: Request,
+     response: Response,
+     next: NextFunction
+
+ )=>{
+    const { postId } = request.params;  
+    const { name } =request.body;
+     // 定义变量tag 为Tag_Model 类型
+     let tag :Tag_Model;
+     try{
+     tag = await get_tag_by_name(name);
+     
+          if(tag){
+         const post_tag = await post_has_tag(parseInt(postId,10), tag.id);
+         console.log(tag);
+         console.log(post_tag);
+         if (post_tag){
+             throw new Error('POST_TAG_EXIST_ALREADY');
+         };
+     };
+     if(!tag){
+         const data = await creat_tag({name});
+         console.log(data);
+         tag = {id: data.insertId};
+     };
+    try{
+         const post_tag_data = await creat_post_tag(parseInt(postId,10),tag.id);
+         response.status(201).send('内容标签创建成功');
+     }catch(error){
+         return next(error);
+     };
+    }catch(error){
+             return next (error)     }
+ };
+
+ /**
+ * 定义一个删除内容标签的处理器
+ */
+ 
+export const Delete = async(
+    request: Request,
+    response: Response,
+    next: NextFunction
+
+)=>{
+    const {postId} = request.params;
+    const { tagId } = request.body;
+    try{
+       const post_tag = await Delete_post_tag(parseInt(postId,10), tagId);
+       response.status(201).send(post_tag);
+
+    }catch(error){
+        return next(error);
+    };
+    
+
 };

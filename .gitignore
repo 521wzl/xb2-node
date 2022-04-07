@@ -4,6 +4,10 @@
 /uploads
 /yflx*
 /upload
+<<<<<<< HEAD
+=======
+
+>>>>>>> tags
 
 # logs
 *.log
