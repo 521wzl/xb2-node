@@ -53,5 +53,6 @@ DELETE FROM post
 WHERE id = ?
 `;
 const [data] = await connection.promise().query(statement,postId)
+return data;
 };
 
