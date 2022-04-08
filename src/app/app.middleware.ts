@@ -58,11 +58,10 @@ switch(error.message){
         statusCode = 404;
         message = '文件不存在';
         break;
-<<<<<<< HEAD
+
     case "UNABLE_REPLY_THIS_COMMENT":
         statusCode = 404;
         message = '您不能回复这条评论';
-=======
     case "TAG_EXIST_ALREADY":
         statusCode = 404;
         message = '标签已存在';
@@ -71,7 +70,6 @@ switch(error.message){
     case "POST_TAG_EXIST_ALREADY":
         statusCode = 404;
         message = '内容标签已存在';
->>>>>>> tags
         break;
     default:
         statusCode = 500;
