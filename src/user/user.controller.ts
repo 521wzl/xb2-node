@@ -2,7 +2,8 @@
  * 定义一个用户注册的处理器
  */
 import {Request,Response,NextFunction} from 'express';
-import {UserModel} from './user.model'
+import {UserModel} from './user.model';
+
 import * as userService  from './user.service';//存在疑问
 import bcrypt from 'bcrypt'
 export const store = async (

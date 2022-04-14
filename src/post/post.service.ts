@@ -1,23 +1,51 @@
 import { connection } from "../app/database/mysql";
 import { PostModel } from "./post.model";
+import { Comment_Model} from "../comment/comment.model"
+import { sqlFragment } from "./post.provide";
 
 
-export const  getPosts =async()=>{
-    const statement=`
+export interface getPostsOptionsFilter{
+    name: string;
+    sql?: string;
+    param?: string
+};
+
+interface GetPostsOptions{
+sort?: string;
+filter?: getPostsOptionsFilter
+};
+
+export const  getPosts = async(options: GetPostsOptions
+    )=>{
+    const {sort,filter} = options;
+    let params: Array<any> = [];
+    if(filter.param){
+    params = [filter.param,...params];
+}
+    
+   const statement=`
     SELECT 
         post.id,
         post.title,
         post.content,
-        JSON_OBJECT(
-        'id',user.id,
-        'name',user.name
-
-        )as user
+        ${sqlFragment.user},
+        ${sqlFragment.TotalComments},
+        ${sqlFragment.file},
+        ${sqlFragment.tags}
+        
     FROM post
-    LEFT JOIN user 
-        ON user.id = post.userId
+    ${sqlFragment.leftJoinUser}
+    ${sqlFragment.leftJoinOneFile}
+    ${sqlFragment.leftJoinTag}
+    WHERE ${filter.sql}
+    GROUP BY post.id
+    ORDER BY ${sort}
+    
      `;
-    const [data]=await connection.promise().query(statement)
+     
+     console.log(statement);
+    const [data]=await connection.promise().query(statement,params);
+ 
     return data;
 }
 /**
@@ -26,7 +54,7 @@ export const  getPosts =async()=>{
 export const creatPost=async(post:PostModel)=>{
     const statement=`
     INSERT INTO post
-    set?
+    set ?
     `;
     const [data]= await connection.promise().query(statement,post);
     return data;

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction, response } from 'express';
-
+import { Tag_Model } from '../tag/tag.model'
 import _ from 'lodash';
 import {creatPost, 
     deletePost,
@@ -16,15 +16,16 @@ import {
 } from '../tag/tag.service'
 
 
-import { Tag_Model } from '../tag/tag.model'
 
-export const index=async(
+
+export const index = async(
     request: Request,
     response: Response,
     next: NextFunction
 )=>{
+    
    try{
-    const posts= await getPosts();
+    const posts = await getPosts({sort: request.sort, filter: request.filter});
     response.send(posts);
 }catch(error){
     next(error);
@@ -41,7 +42,7 @@ export const store=async (
     /**
      * 准备数据
      */
-    const{title,content}=request.body;
+    const{title,content,}=request.body;
     const {id:userId} = request.user;
     try{
         const data= await creatPost({title,content,userId});

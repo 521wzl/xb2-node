@@ -21,7 +21,7 @@ import fs from "fs";
         'size'
   
      ]);
-     //console.log(request.file);
+     //console.log(info);
     try{
          const data = await creatFile({
              ...info,
@@ -30,7 +30,7 @@ import fs from "fs";
              ...request.fileMetaData
          });
          response.status(201).send(data);
-         //console.log(data);
+         console.log(data);
      }catch(error){
          next(error);
      };

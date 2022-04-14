@@ -8,6 +8,6 @@ export class FileModel{
     userId: number;
     width?:number;
     height?:number;
-    metedata?:JSON
+    metedata?:{}
 
 }

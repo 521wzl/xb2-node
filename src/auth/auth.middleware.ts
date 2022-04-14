@@ -6,6 +6,8 @@ import { PUBLIC_KEY } from "../app/app.config";
 import { TokenPayload } from "./auth.interface";
 import { access } from "fs";
 import { possess } from "./auth.service";
+
+
 export const validateLoginData = async (
     request: Request,
     response: Response,
@@ -86,12 +88,11 @@ export const accessControl = (options:accessControlOptions)=>{
         console.log("访问控制")
         const {id:userId}= request.user;
         if (userId==1) next();
-        //const {postId}=request.params;
+        
         const resourceIdParams = Object.keys(request.params)[0];
         const resourceType = resourceIdParams.replace("Id" , " ");
         const resourceId =parseInt(request.params[resourceIdParams], 10);
-        //const userId = request.user;
-        //if (userId==1) next();
+       
         
             if (possession){
             try{

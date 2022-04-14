@@ -26,7 +26,7 @@ export const fileProcessor = async(
     try{
         image = await Jimp.read( path ); // ？？？ 缺少await就会报错
        
-        console.log(image);
+       // console.log(image);
         
     }catch(error){
         return next(error);
