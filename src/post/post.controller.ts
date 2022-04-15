@@ -1,13 +1,14 @@
 import { Request, Response, NextFunction, response } from 'express';
 import { Tag_Model } from '../tag/tag.model'
-import _ from 'lodash';
+import _, { filter } from 'lodash';
 import {creatPost, 
     deletePost,
      getPosts,
       updatePost,
       creat_post_tag, 
       post_has_tag,  
-      Delete_post_tag
+      Delete_post_tag,
+      getPostsTotalCounts
     } from './post.service';
 import {
     creat_tag, 
@@ -23,9 +24,17 @@ export const index = async(
     response: Response,
     next: NextFunction
 )=>{
+    try {
+        const totalCount = await getPostsTotalCounts({filter:request.filter});
+        response.header('x-Total-Content',totalCount);
+        console.log('到这儿了吗?')
+
+    }catch(error){
+        next(error);
+    };
     
    try{
-    const posts = await getPosts({sort: request.sort, filter: request.filter});
+    const posts = await getPosts({sort: request.sort, filter: request.filter, pagination:request.pagination});
     response.send(posts);
 }catch(error){
     next(error);

@@ -4,6 +4,11 @@ import { Comment_Model} from "../comment/comment.model"
 import { sqlFragment } from "./post.provide";
 
 
+export interface GetPostsOptionsPagination{
+    limit:number;
+    offset:number
+};
+
 export interface getPostsOptionsFilter{
     name: string;
     sql?: string;
@@ -12,13 +17,15 @@ export interface getPostsOptionsFilter{
 
 interface GetPostsOptions{
 sort?: string;
-filter?: getPostsOptionsFilter
+filter?: getPostsOptionsFilter;
+pagination?:GetPostsOptionsPagination
 };
 
 export const  getPosts = async(options: GetPostsOptions
     )=>{
-    const {sort,filter} = options;
-    let params: Array<any> = [];
+    const {sort,filter,pagination} = options;
+    let {limit, offset} = pagination;
+    let params: Array<any> = [limit,offset];
     if(filter.param){
     params = [filter.param,...params];
 }
@@ -38,8 +45,11 @@ export const  getPosts = async(options: GetPostsOptions
     ${sqlFragment.leftJoinOneFile}
     ${sqlFragment.leftJoinTag}
     WHERE ${filter.sql}
+   
     GROUP BY post.id
     ORDER BY ${sort}
+    limit ?
+    offset ?
     
      `;
      
@@ -48,6 +58,33 @@ export const  getPosts = async(options: GetPostsOptions
  
     return data;
 }
+/**
+ * 定义一个获取内送总数的功能
+ */
+export const getPostsTotalCounts = async(options:GetPostsOptions)=>{
+    const {
+        filter
+    } = options;
+    
+   let params = [filter.param];
+const statement = `
+SELECT 
+COUNT(post.id) AS totalPosts
+
+FROM post
+${sqlFragment.leftJoinUser}
+${sqlFragment.leftJoinOneFile}
+
+${sqlFragment.leftJoinTag}
+WHERE ${filter.sql}
+`;
+const [data] = await connection.promise().query(statement,params)
+return data[0].totalPosts
+
+};
+
+
+
 /**
  * 创建内容写入数据库
  */

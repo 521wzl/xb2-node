@@ -1,5 +1,6 @@
 import {Request, Response, NextFunction} from 'express';
 import { nextTick } from 'process';
+import { POSTS_PER_PAGE } from '../app/app.config';
 import { fileURLToPath } from 'url';
 import {getPostsOptionsFilter} from './post.service'
 
@@ -69,4 +70,26 @@ export const sort = (
            }
         }
         next();
+};
+/**
+ * 定义一个内容分页的中间件
+ */
+export const paginate = (
+    request:Request,
+    response:Response,
+    next:NextFunction
+)=>{
+    //默认当前页码为1
+    const { page = 1 } = request.params;
+
+    //如果设置了POSTS_PER_PAGE就将其转换为10进制并赋值给limit，如果没有设置，则 limit 为30
+    const limit = parseInt(POSTS_PER_PAGE,10)||30;
+
+    //计算偏移量
+    const offset = limit * ( parseInt(`${page}`,10) - 1);
+
+    request.pagination = {limit, offset};
+   
+    
+    next();
 };
