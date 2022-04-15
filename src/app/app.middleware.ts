@@ -60,6 +60,10 @@ switch(error.message){
         statusCode = 404;
         message = '内容标签已存在';
         break;
+    case "FILE_DOSE_NOT_ALLOWED":
+        statusCode = 404;
+        message = '图像格式不对';
+        break;
     default:
         statusCode = 500;
         message='处理器错误!';
