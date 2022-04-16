@@ -1,6 +1,7 @@
+import { strictEqual } from 'assert';
 import {connection} from '../app/database/mysql';
 /**
- * 定义一个用户点赞的服务
+ * 定义保存点赞内容的功能
  */
 export const creatLiked = async (
     userId:number,
@@ -13,3 +14,17 @@ export const creatLiked = async (
     const [data] = await connection.promise().query(statement, {userId,postId});
     return data;
 };
+/**
+ * 定义取消点赞内容的功能
+ */
+ export const deleteLikedBYId = async (
+     userId:number,
+     postId:number
+ ) => {
+    const statement = `
+    DELETE  FROM user_like_post
+    WHERE userId = ? AND postId = ?
+    `;
+    const [data] = await connection.promise().query(statement, [userId,postId]);
+    return data;
+ };
