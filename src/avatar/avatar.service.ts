@@ -14,3 +14,23 @@ export const creatAvatar = async (avatar:AvatarModel) => {
     return data;
 
 };
+
+
+/**
+ * 定义一个文件信息服务的功能
+ */
+export const getAvatarByUserId = async (userId:number
+
+) =>{
+    const statement = `
+    SELECT * 
+    FROM avatar
+    WHERE userId = ?
+    ORDER BY avatar.id desc
+    limit 1
+
+    `;
+
+    const [data] = await connection.promise().query(statement,userId);
+    return data[0];
+};

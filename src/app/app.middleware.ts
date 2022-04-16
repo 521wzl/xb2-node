@@ -64,6 +64,10 @@ switch(error.message){
         statusCode = 404;
         message = '图像格式不对';
         break;
+    case "AVATAR_DOSE_NOT_EXIST":
+        statusCode = 404;
+        message = '图像不存在';
+        break;
     default:
         statusCode = 500;
         message='处理器错误!';
