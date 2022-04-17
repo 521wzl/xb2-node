@@ -16,21 +16,25 @@ export const sqlFragment = {
         ON user.id = avatar.userId
     `,
     TotalComments: `
-        (SELECT
+        (
+            SELECT
             COUNT(comment.id)
             FROM comment
             WHERE post.id = comment.postId
-            )AS totalComments
-       
+        )AS totalComments
        
 
     `,
-    leftJoinComment: `
-        LEFT JOIN comment
-        ON post.id = comment.postId
-      
-    
+    TotalLikes: `
+        (
+            SELECT
+            COUNT(user_like_post.postId)
+            FROM user_like_post
+            WHERE post.id = user_like_post.postId
+        )AS TotalLikes
     `,
+
+  
     file: `
     CAST(
         IF (COUNT(file.id),
@@ -73,4 +77,10 @@ export const sqlFragment = {
     ON post_tag.tagId = tag.id
     
     `,
+    innerJoinUser_like_post:`
+    INNER JOIN user_like_post
+    ON post.id = user_like_post.postId
+    
+    `
+    
 }

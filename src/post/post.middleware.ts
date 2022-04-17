@@ -67,8 +67,18 @@ export const sort = (
                name: 'userPublished',
                sql: 'user.id = ?',
                param: `${user}`
-           }
+           };
+        
+        };
+        if(user && action == 'liked' && !tag){
+            request.filter ={ 
+                name: 'userLiked',
+                sql: 'user_like_post.userId = ?',
+                param: `${user}`
+
+            };
         }
+
         next();
 };
 /**
@@ -80,7 +90,7 @@ export const paginate = (
     next:NextFunction
 )=>{
     //默认当前页码为1
-    const { page = 1 } = request.params;
+    const { page = 1 } = request.query;
 
     //如果设置了POSTS_PER_PAGE就将其转换为10进制并赋值给limit，如果没有设置，则 limit 为30
     const limit = parseInt(POSTS_PER_PAGE,10)||30;

@@ -38,12 +38,15 @@ export const  getPosts = async(options: GetPostsOptions
         ${sqlFragment.user},
         ${sqlFragment.TotalComments},
         ${sqlFragment.file},
-        ${sqlFragment.tags}
+        ${sqlFragment.tags},
+        ${sqlFragment.TotalLikes}
         
     FROM post
     ${sqlFragment.leftJoinUser}
     ${sqlFragment.leftJoinOneFile}
     ${sqlFragment.leftJoinTag}
+    ${filter.name == 'userLiked' ?
+    sqlFragment.innerJoinUser_like_post : '' }
     WHERE ${filter.sql}
    
     GROUP BY post.id
@@ -69,12 +72,13 @@ export const getPostsTotalCounts = async(options:GetPostsOptions)=>{
    let params = [filter.param];
 const statement = `
 SELECT 
-COUNT(post.id) AS totalPosts
+COUNT(DISTINCT post.id) AS totalPosts
 
 FROM post
 ${sqlFragment.leftJoinUser}
 ${sqlFragment.leftJoinOneFile}
-
+${filter.name == 'userLiked' ?
+sqlFragment.innerJoinUser_like_post : '' }
 ${sqlFragment.leftJoinTag}
 WHERE ${filter.sql}
 `;
@@ -162,4 +166,35 @@ export const Delete_post_tag= async (postId: number, tagId: number
     `;
     const [data] = await connection.promise().query(statement,[postId,tagId]);
     return data;
+};
+
+/**
+ * 定获取单个内容的功能
+ */
+export const getOnePostById = async (postId:number) =>{
+    const statement = `
+    SELECT
+    post.id,
+    post.title,
+    post.content,
+    ${sqlFragment.user},
+    ${sqlFragment.file},
+    ${sqlFragment.TotalComments},
+    ${sqlFragment.TotalLikes}
+    
+    FROM post
+    ${sqlFragment.leftJoinUser}
+    ${sqlFragment.leftJoinOneFile}
+    ${sqlFragment.leftJoinTag}
+    ${sqlFragment.innerJoinUser_like_post}
+    WHERE post.id = ?
+    GROUP BY post.id
+    ORDER BY post.id DESC
+     
+
+    `;
+
+    const [data] = await connection.promise().query(statement, postId);
+    if(!data[0].id){throw new Error('NOT_FOUND')};
+    return data[0];
 };

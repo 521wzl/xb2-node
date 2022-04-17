@@ -3,12 +3,13 @@ import { Tag_Model } from '../tag/tag.model'
 import _, { filter } from 'lodash';
 import {creatPost, 
     deletePost,
-     getPosts,
-      updatePost,
-      creat_post_tag, 
-      post_has_tag,  
-      Delete_post_tag,
-      getPostsTotalCounts
+    getPosts,
+    updatePost,
+    creat_post_tag, 
+    post_has_tag,  
+    Delete_post_tag,
+    getPostsTotalCounts,
+    getOnePostById
     } from './post.service';
 import {
     creat_tag, 
@@ -27,7 +28,7 @@ export const index = async(
     try {
         const totalCount = await getPostsTotalCounts({filter:request.filter});
         response.header('x-Total-Content',totalCount);
-        console.log('到这儿了吗?')
+       
 
     }catch(error){
         next(error);
@@ -159,4 +160,20 @@ export const Delete = async(
     };
     
 
+};
+/**
+ * 定义单个内容接口
+ */
+export const singlePost = async (
+    request:Request,
+    response: Response,
+    next: NextFunction
+) =>{
+    const {postId} = request.params;
+    try{
+    const post = await getOnePostById(parseInt(postId,10));
+    response.send(post)
+    }catch(error){
+    next(error)
+    };
 };
