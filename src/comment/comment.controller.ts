@@ -1,7 +1,10 @@
 import {Request, Response, NextFunction} from 'express';
 import { nextTick } from 'process';
+import { commentsFilter } from './comment.middleware';
+import {getCommentsOptionsFilter} from './comment.service';
 import { Creat_comment, 
     deleteComment, 
+    getComments, 
     Is_reply_comment, 
     updateComment
     
@@ -107,4 +110,24 @@ try{
     }catch(error){
         next(error);
     }
+};
+
+/**
+ * 定义一个获取评论列表的接口
+ */
+export const index = async (
+    request: Request,
+    response: Response,
+    next: NextFunction
+
+) =>{ 
+    //const {id:userId} = request.user;
+    //const{postId} = request.params;
+    try{
+        const comments =  await getComments({commentsFilter:request.commentsFilter});
+        response.send(comments);
+    }catch(error){
+        next(error);
+    };
+    
 };

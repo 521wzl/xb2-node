@@ -1,5 +1,9 @@
+import { NextFunction } from 'express';
 import { connection } from '../app/database/mysql';
-import { Comment_Model } from './comment.model'
+import { Comment_Model } from './comment.model';
+import {sqlFragment} from './comment.provides';
+
+
 /**
  *定义一个存储评论数据的功能
  */
@@ -56,3 +60,51 @@ export const deleteComment = async (commentId:number)=>{
     const [data] = await connection.promise().query(statement,commentId)
     return data;
 };
+
+
+/**
+ * 定义获取评论列表的功能
+ */
+export interface getCommentsOptionsFilter{
+    name?:string,
+    sql?:string,
+    param?:string
+};
+interface getCommentsOptions{
+    commentsFilter?:getCommentsOptionsFilter
+};
+
+export const getComments = async (options:getCommentsOptions
+
+  )=> {
+      const {commentsFilter} = options;
+        
+        
+     let params: Array<any>=[];
+     params = [commentsFilter.param, ...params];
+     const statement = `
+     SELECT 
+     comment.id,
+     comment.content,
+     ${sqlFragment.user},
+     ${sqlFragment.post}
+     ${
+         commentsFilter.name == 'userReplied' ? `,${sqlFragment.replied}` : ''
+         
+     }
+     ${commentsFilter.name !== 'userReplied'? `,${sqlFragment.totalReplies}` : '' }
+
+     FROM comment 
+     ${sqlFragment.leftJoinUser}
+     ${sqlFragment.leftJoinPost}
+     WHERE  ${commentsFilter.sql}
+     GROUP BY comment.id
+     ORDER BY comment.id desc
+
+      
+     `;
+     console.log(statement);
+     const [data] = await connection.promise().query(statement, params);
+      return data;
+
+  };
