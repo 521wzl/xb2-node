@@ -34,4 +34,9 @@ PUBLIC_KEY = Buffer.from(PUBLIC_KEY,'base64').toString();
 /**
  * 内容分页配置
  */
-export let { POSTS_PER_PAGE } = process.env;
+export const { POSTS_PER_PAGE } = process.env;
+
+/**
+ *评论列表分页配置
+ */
+export const { COMMENTS_PER_PAGE } = process.env;

@@ -77,7 +77,7 @@ export const update= async (
     const post =_.pick(request.body,['title','content']);//可以更改content里的一条内容，
     try{
        
-        const data=await updatePost(parseInt(postId,10),post);
+        const data = await updatePost(parseInt(postId,10),post);
         response.status(201).send(data);
     }catch(error){
         next(error);

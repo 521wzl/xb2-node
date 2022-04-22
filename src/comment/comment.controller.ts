@@ -1,7 +1,7 @@
 import {Request, Response, NextFunction} from 'express';
 import { nextTick } from 'process';
-import { commentsFilter } from './comment.middleware';
-import {getCommentsOptionsFilter} from './comment.service';
+import { filter } from './comment.middleware';
+import {getPostsOptionsFilter} from '../post/post.service';
 import { Creat_comment, 
     deleteComment, 
     getComments, 
@@ -121,13 +121,13 @@ export const index = async (
     next: NextFunction
 
 ) =>{ 
-    //const {id:userId} = request.user;
-    //const{postId} = request.params;
+   
     try{
-        const comments =  await getComments({commentsFilter:request.commentsFilter});
+        const comments =  await getComments({ filter:request.filter, pagination:request.pagination });
         response.send(comments);
     }catch(error){
         next(error);
     };
     
 };
+

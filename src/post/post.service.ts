@@ -23,14 +23,14 @@ pagination?:GetPostsOptionsPagination
 
 export const  getPosts = async(options: GetPostsOptions
     )=>{
-    const {sort,filter,pagination} = options;
+    const {sort, filter, pagination} = options;
     let {limit, offset} = pagination;
-    let params: Array<any> = [limit,offset];
+    let params: Array<any> = [limit, offset];
     if(filter.param){
-    params = [filter.param,...params];
-}
+    params = [filter.param, ...params];
+};
     
-   const statement=`
+   const statement = `
     SELECT 
         post.id,
         post.title,
@@ -40,29 +40,33 @@ export const  getPosts = async(options: GetPostsOptions
         ${sqlFragment.file},
         ${sqlFragment.tags},
         ${sqlFragment.TotalLikes}
-        
+       
+
     FROM post
-    ${sqlFragment.leftJoinUser}
-    ${sqlFragment.leftJoinOneFile}
-    ${sqlFragment.leftJoinTag}
-    ${filter.name == 'userLiked' ?
-    sqlFragment.innerJoinUser_like_post : '' }
+        ${sqlFragment.leftJoinUser}
+        ${sqlFragment.leftJoinOneFile}
+        ${sqlFragment.leftJoinTag}
+        ${filter.name == 'userLiked' ?
+        sqlFragment.innerJoinUser_like_post : '' }
+
     WHERE ${filter.sql}
-   
     GROUP BY post.id
     ORDER BY ${sort}
-    limit ?
-    offset ?
+    LIMIT ?
+    OFFSET ?
+        
+        
+    
     
      `;
      
      console.log(statement);
-    const [data]=await connection.promise().query(statement,params);
+    const [data]=await connection.promise().query(statement, params);
  
     return data;
 }
 /**
- * 定义一个获取内送总数的功能
+ * 定义一个获取内容总数的功能
  */
 export const getPostsTotalCounts = async(options:GetPostsOptions)=>{
     const {
@@ -198,3 +202,8 @@ export const getOnePostById = async (postId:number) =>{
     if(!data[0].id){throw new Error('NOT_FOUND')};
     return data[0];
 };
+
+
+/* 
+
+*/

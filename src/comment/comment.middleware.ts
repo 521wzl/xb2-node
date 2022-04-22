@@ -3,19 +3,19 @@ import { cp } from 'fs';
 /**
  * 定义一个过滤评论列表的中间件
  */
-export const commentsFilter = async (
+export const filter = async (
     request:Request,
     response:Response,
     next:NextFunction
 ) =>{
     const {post, user,action} =request.query;
-     request.commentsFilter = {
+     request.filter = {
          name:'default',
-         sql: 'comment.parentId IS  NULL',
+         sql: 'comment.parentId IS NULL'
          
      };
      if(post && !user && !action ){
-     request.commentsFilter = {
+     request.filter = {
          name:'postComments',
          sql:'comment.parentId IS NULL AND comment.postId = ?' ,
          param: `${post}`
@@ -24,7 +24,7 @@ export const commentsFilter = async (
      };
     };
      if(user && action == 'published' && !post){
-        request.commentsFilter={ 
+        request.filter={ 
             name:'userPublished',
             sql:'comment.parentId IS NULL AND comment.userId = ?',
             param: `${user}`
@@ -32,7 +32,7 @@ export const commentsFilter = async (
      };
 };
     if(user && action == 'replied' && !post){
-        request.commentsFilter={
+        request.filter={
             name:'userReplied',
             sql:'comment.parentId IS NOT NULL AND comment.userId = ?',
             param:`${user}`
@@ -40,3 +40,4 @@ export const commentsFilter = async (
     }
 next();
 };
+

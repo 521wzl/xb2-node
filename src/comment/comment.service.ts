@@ -2,6 +2,7 @@ import { NextFunction } from 'express';
 import { connection } from '../app/database/mysql';
 import { Comment_Model } from './comment.model';
 import {sqlFragment} from './comment.provides';
+import { getPostsOptionsFilter ,GetPostsOptionsPagination} from '../post/post.service'
 
 
 /**
@@ -65,46 +66,45 @@ export const deleteComment = async (commentId:number)=>{
 /**
  * 定义获取评论列表的功能
  */
-export interface getCommentsOptionsFilter{
-    name?:string,
-    sql?:string,
-    param?:string
-};
+
+
 interface getCommentsOptions{
-    commentsFilter?:getCommentsOptionsFilter
+    filter?: getPostsOptionsFilter;
+    pagination?: GetPostsOptionsPagination
 };
 
-export const getComments = async (options:getCommentsOptions
+export const getComments = async ( options: getCommentsOptions
 
   )=> {
-      const {commentsFilter} = options;
+      const { filter, pagination } = options;
+      const { limit, offset } = pagination;
         
         
-     let params: Array<any>=[];
-     params = [commentsFilter.param, ...params];
+     let params: Array<any> = [ limit, offset ];
+     params = [ filter.param, ...params ];
      const statement = `
      SELECT 
      comment.id,
      comment.content,
-     ${sqlFragment.user},
-     ${sqlFragment.post}
+     ${ sqlFragment.user },
+     ${ sqlFragment.post }
      ${
-         commentsFilter.name == 'userReplied' ? `,${sqlFragment.replied}` : ''
+         filter.name == 'userReplied' ? `,${ sqlFragment.replied }` : ''
          
      }
-     ${commentsFilter.name !== 'userReplied'? `,${sqlFragment.totalReplies}` : '' }
+     ${filter.name !== 'userReplied' ? `,${ sqlFragment.totalReplies }` : '' }
 
      FROM comment 
-     ${sqlFragment.leftJoinUser}
-     ${sqlFragment.leftJoinPost}
-     WHERE  ${commentsFilter.sql}
+     ${ sqlFragment.leftJoinUser }
+     ${ sqlFragment.leftJoinPost }
+     WHERE comment.parentId IS NOT NULL
      GROUP BY comment.id
      ORDER BY comment.id desc
-
-      
+     LIMIT ?
+     OFFSET ?
      `;
      console.log(statement);
-     const [data] = await connection.promise().query(statement, params);
-      return data;
+     const [data] = await connection.promise().query( statement, params );
+     return data;
 
   };

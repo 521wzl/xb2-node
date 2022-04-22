@@ -39,8 +39,8 @@ totalReplies:`
     SELECT 
     COUNT(repliedComment.id)
     FROM comment repliedComment
-    WHERE comment.parentId = comment.id
+    WHERE repliedComment.parentId = comment.id
 )AS totalReplies
-`
+`,
    
 };
