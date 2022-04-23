@@ -2,9 +2,11 @@ import {Request, Response, NextFunction} from 'express';
 import { nextTick } from 'process';
 import { filter } from './comment.middleware';
 import {getPostsOptionsFilter} from '../post/post.service';
+
 import { Creat_comment, 
     deleteComment, 
     getComments, 
+    getCommentsTotalCounts, 
     Is_reply_comment, 
     updateComment
     
@@ -121,6 +123,12 @@ export const index = async (
     next: NextFunction
 
 ) =>{ 
+    try{
+        const total = await getCommentsTotalCounts({filter: request.filter});
+        response.header('X-Total-Count', total);
+    }catch(error){
+        next(error);
+    };
    
     try{
         const comments =  await getComments({ filter:request.filter, pagination:request.pagination });

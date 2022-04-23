@@ -79,9 +79,13 @@ export const getComments = async ( options: getCommentsOptions
       const { filter, pagination } = options;
       const { limit, offset } = pagination;
         
-        
+    
      let params: Array<any> = [ limit, offset ];
+     if(filter.param) {
      params = [ filter.param, ...params ];
+   
+     console.log(params);
+    }
      const statement = `
      SELECT 
      comment.id,
@@ -97,14 +101,37 @@ export const getComments = async ( options: getCommentsOptions
      FROM comment 
      ${ sqlFragment.leftJoinUser }
      ${ sqlFragment.leftJoinPost }
-     WHERE comment.parentId IS NOT NULL
+     WHERE ${filter.sql}
      GROUP BY comment.id
      ORDER BY comment.id desc
      LIMIT ?
      OFFSET ?
      `;
-     console.log(statement);
+     
      const [data] = await connection.promise().query( statement, params );
      return data;
 
+  };
+  /**
+   * 定义获取评论总数的功能
+   */
+  export const getCommentsTotalCounts = async (options: getCommentsOptions) => {
+      const { filter } = options;
+      let params : Array<any> = [];
+      
+      params = [ filter.param ];
+      const statement = `
+      SELECT 
+      COUNT(DISTINCT comment.id) AS commentTotals
+      FROM comment
+      ${sqlFragment.leftJoinUser}
+      ${sqlFragment.leftJoinPost}
+      WHERE ${filter.sql}
+   
+    
+      
+      `;
+   
+      const [data] = await connection.promise().query(statement, params);
+      return data[0].commentTotals;
   };

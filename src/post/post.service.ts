@@ -3,7 +3,9 @@ import { PostModel } from "./post.model";
 import { Comment_Model} from "../comment/comment.model"
 import { sqlFragment } from "./post.provide";
 
-
+/**
+ * 获取带分页功能的评论列表
+ */
 export interface GetPostsOptionsPagination{
     limit:number;
     offset:number
@@ -28,7 +30,8 @@ export const  getPosts = async(options: GetPostsOptions
     let params: Array<any> = [limit, offset];
     if(filter.param){
     params = [filter.param, ...params];
-};
+    console.log(params);
+    };
     
    const statement = `
     SELECT 
@@ -87,7 +90,7 @@ ${sqlFragment.leftJoinTag}
 WHERE ${filter.sql}
 `;
 const [data] = await connection.promise().query(statement,params)
-return data[0].totalPosts
+return data[0].totalPosts;
 
 };
 

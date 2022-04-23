@@ -27,7 +27,7 @@ export const index = async(
 )=>{
     try {
         const totalCount = await getPostsTotalCounts({filter:request.filter});
-        response.header('x-Total-Content',totalCount);
+        response.header('X-Total-Content',totalCount);
        
 
     }catch(error){
