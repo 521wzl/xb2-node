@@ -9,6 +9,10 @@ const router = express.Router();
  * 获取评论列表分页显示
  */
 router.get('/comments', authGuard, filter, paginate( parseInt(COMMENTS_PER_PAGE,10) ), commentController.index);
+/**
+ * 获取评论列表接口
+ */
+router.get('/comments/:commentId/replies', commentController.reply)
 router.post('/comments', authGuard, commentController.store);
 router.post('/comments/:commentId/reply',authGuard, commentController.Reply);
 router.patch('/comments/:commentId',authGuard, accessControl({possession: true}), commentController.update);

@@ -6,6 +6,7 @@ import {getPostsOptionsFilter} from '../post/post.service';
 import { Creat_comment, 
     deleteComment, 
     getComments, 
+    getCommentsReplies,  
     getCommentsTotalCounts, 
     Is_reply_comment, 
     updateComment
@@ -138,4 +139,19 @@ export const index = async (
     };
     
 };
-
+/**
+ * 定义一个获取评论回复列表的接口
+ */
+export const reply = async (
+    request: Request,
+    response: Response,
+    next: NextFunction
+) => {
+    const {commentId} = request.params;
+    try{
+    const replies = await getCommentsReplies({commentId: parseInt(commentId,10)});
+    response.send(replies);
+    }catch(error){
+        next(error);
+    };
+};

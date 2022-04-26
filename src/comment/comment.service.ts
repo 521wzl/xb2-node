@@ -2,7 +2,8 @@ import { NextFunction } from 'express';
 import { connection } from '../app/database/mysql';
 import { Comment_Model } from './comment.model';
 import {sqlFragment} from './comment.provides';
-import { getPostsOptionsFilter ,GetPostsOptionsPagination} from '../post/post.service'
+import { getPostsOptionsFilter ,GetPostsOptionsPagination} from '../post/post.service';
+
 
 
 /**
@@ -135,3 +136,26 @@ export const getComments = async ( options: getCommentsOptions
       const [data] = await connection.promise().query(statement, params);
       return data[0].commentTotals;
   };
+  /**
+   * 定义获取评论回复列表功能
+   */
+  interface getCommentsRepliesOptions{
+      commentId?: number 
+  }
+
+  export const getCommentsReplies = async (options: getCommentsRepliesOptions) =>{
+      const { commentId } = options;
+      const statement = `
+    SELECT 
+        comment.id,
+        comment.content,
+    FROM comment
+        ${sqlFragment.leftJoinUser}
+    WHERE parentId = ?
+    GROUP BY comment.id
+      `;
+      console.log(statement);
+      const [data] = await connection.promise().query(statement, commentId);
+      return data;
+  };
+  

@@ -16,22 +16,28 @@ export const validateLoginData = async (
     /**
      * 准备数据
      */
-    const {name,password} = request.body;
+    const {name, password} = request.body;
     /**
      * 用户/密码为空
      */
-    if(!name) return next (new Error('NAME_IS_REQUIRED'));
-    if (!password) return next (new Error('PASSWORD_IS_REQUIRED'))
+    if(!name) {
+        return next( new Error('NAME_IS_REQUIRED'));
+    };
+    if (!password) {
+        return next (new Error('PASSWORD_IS_REQUIRED'));
+    };
    /**
     *执行service,提取数据库的name 和password
     */
-    const user = await userService.getUserByName(name, { hasPassword: true } );//此处的name从request.body解构出来(替换： ？ 赋值给 WHERE name = ?）
+    const user = await userService.getUserByName(name, {password: true});//此处的name从request.body解构出来(替换： ？ 赋值给 WHERE name = ?）
 
 
     /**
      * 验证用户名
      */
-    if(!user) return next (new Error('USER_DOSE_NOT_EXIST'));
+    if(!user) {
+        return next (new Error('USER_DOSE_NOT_EXIST'));
+    };
     /**
      * 为request 添加一个属性user
      */
@@ -39,8 +45,9 @@ export const validateLoginData = async (
     /**
      * 验证对比密码
      */
-    const match = await bcrypt.compare(password,user.password);//password是从request.body里解构出来，user.password是从数据库里拿出来的
-    if (!match) return next(new Error('PASSWORD_IS_WRONG'));
+    const match = await bcrypt.compare(password, user.password);//password是从request.body里解构出来，user.password是从数据库里拿出来的
+    if (!match) {return next(new Error('PASSWORD_DOES_NOT_MATCH'));
+    };
    
         
     next();
