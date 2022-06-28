@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import postRouter from '../post/post.router';
 import userRouter from '../user/user.router';
 import loginRouter from '../auth/auth.router';
@@ -10,6 +11,16 @@ import avatarRouter from '../avatar/avatar.router';
 import likedRouter from '../liked/liked.router';
 const app = express();
 app.use(express.json());
+/**
+ * 解决跨域问题
+ */
+app.use(cors(
+    {
+        origin: '*',
+    exposedHeaders: 'X-Total-Count',
+
+    }
+));
 app.use(
     postRouter,
     userRouter,

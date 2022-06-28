@@ -30,7 +30,7 @@ export const  getPosts = async(options: GetPostsOptions
     let params: Array<any> = [limit, offset];
     if(filter.param){
     params = [filter.param, ...params];
-    console.log(params);
+    
     };
     
    const statement = `
@@ -49,8 +49,7 @@ export const  getPosts = async(options: GetPostsOptions
         ${sqlFragment.leftJoinUser}
         ${sqlFragment.leftJoinOneFile}
         ${sqlFragment.leftJoinTag}
-        ${filter.name == 'userLiked' ?
-        sqlFragment.innerJoinUser_like_post : '' }
+        ${filter.name == 'userLiked' ? sqlFragment.innerJoinUser_like_post : '' }
 
     WHERE ${filter.sql}
     GROUP BY post.id
@@ -63,7 +62,7 @@ export const  getPosts = async(options: GetPostsOptions
     
      `;
      
-     console.log(statement);
+    
     const [data]=await connection.promise().query(statement, params);
  
     return data;

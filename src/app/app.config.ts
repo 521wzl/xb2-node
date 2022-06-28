@@ -4,7 +4,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 /**
- * 配置应用
+ * 配置应用端口
  */
 export const {AIR_PORT} = process.env;
 /**

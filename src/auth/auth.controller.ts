@@ -1,4 +1,4 @@
-import {Request,Response,NextFunction, response} from 'express';
+import {Request,Response,NextFunction} from 'express';
 import {signToken} from './auth.service';
 import {validateLoginData} from './auth.middleware'
 import { identity } from 'lodash';
